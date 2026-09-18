@@ -1,0 +1,1 @@
+pygame-ce>=2.5.8   # compatible Python 3.10 à 3.14+ (pygame 2.6 s'arrête à 3.13)
