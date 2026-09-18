@@ -3,12 +3,12 @@ import random
 
 from . import config as C
 from .entities import (
-    HIGH, JETPACK, LOW, MAGNET, MULTIPLIER, POWERUP_KINDS, SHIELD, SNEAKERS, TRAIN,
+    HIGH, HOVERBOARD, JETPACK, LOW, MAGNET, MULTIPLIER, POWERUP_KINDS, SHIELD, SNEAKERS, TRAIN,
     Coin, Obstacle, Player, PowerUp,
 )
 
 # poids de tirage des bonus (le bouclier et l'aimant restent les plus fréquents)
-POWERUP_WEIGHTS = {MAGNET: 5, SHIELD: 5, MULTIPLIER: 4, SNEAKERS: 3, JETPACK: 2}
+POWERUP_WEIGHTS = {MAGNET: 5, SHIELD: 5, MULTIPLIER: 4, SNEAKERS: 3, JETPACK: 2, HOVERBOARD: 3}
 
 
 class World:
@@ -24,6 +24,7 @@ class World:
         self.jetpack_timer = 0.0
         self.multiplier_timer = 0.0
         self.sneakers_timer = 0.0
+        self.hoverboard_timer = 0.0
         self._jet_coin_timer = 0.0
         self.powerups_run = 0            # bonus ramassés (missions)
         self.jetpacks_run = 0            # jetpacks ramassés (missions)
@@ -69,11 +70,11 @@ class World:
 
         # une traînée de pièces dans une voie libre
         coin_lane = None
-        if free and self.rng.random() < 0.7:
+        if free and self.rng.random() < 0.85:
             coin_lane = self.rng.choice(free)
-            for i in range(5):
-                self.coins.append(Coin(coin_lane, -20 - i * 45))
-            longest = max(longest, 5 * 45)
+            for i in range(10):
+                self.coins.append(Coin(coin_lane, -20 - i * 40))
+            longest = max(longest, 10 * 40)
 
         # un bonus de temps en temps, dans une voie libre (pas sur les pièces)
         spots = [lane for lane in free if lane != coin_lane]
@@ -99,6 +100,7 @@ class World:
         self.invuln_timer = max(0.0, self.invuln_timer - dt)
         self.multiplier_timer = max(0.0, self.multiplier_timer - dt)
         self.sneakers_timer = max(0.0, self.sneakers_timer - dt)
+        self.hoverboard_timer = max(0.0, self.hoverboard_timer - dt)
         self.player.jump_boost = C.SNEAKERS_BOOST if self.sneakers_timer > 0 else 1.0
         if self.jetpack_timer > 0:
             self.jetpack_timer = max(0.0, self.jetpack_timer - dt)
@@ -141,7 +143,10 @@ class World:
 
         if self.invuln_timer <= 0 and not self.player.flying:
             hit = [o for o in self.obstacles if o.hits(self.player)]
-            if hit and self.shield:
+            if hit and self.hoverboard_timer > 0:
+                # hoverboard : on fend les obstacles touchés sans mourir
+                self.obstacles = [o for o in self.obstacles if all(o is not h for h in hit)]
+            elif hit and self.shield:
                 # le bouclier absorbe le choc et détruit l'obstacle touché
                 self.shield = False
                 self.invuln_timer = C.INVULN_TIME
@@ -167,6 +172,8 @@ class World:
         elif kind == SNEAKERS:
             self.sneakers_timer = C.SNEAKERS_TIME
             self.player.jump_boost = C.SNEAKERS_BOOST  # effet immédiat, dès la même image
+        elif kind == HOVERBOARD:
+            self.hoverboard_timer = C.HOVERBOARD_TIME
         elif kind == JETPACK:
             self.jetpacks_run += 1
             self.jetpack_timer = C.JETPACK_TIME

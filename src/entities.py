@@ -6,8 +6,9 @@ import pygame
 from . import config as C
 
 TRAIN, LOW, HIGH = "train", "low", "high"
-MAGNET, SHIELD, JETPACK, MULTIPLIER, SNEAKERS = "magnet", "shield", "jetpack", "multiplier", "sneakers"
-POWERUP_KINDS = (MAGNET, SHIELD, JETPACK, MULTIPLIER, SNEAKERS)
+MAGNET, SHIELD, JETPACK, MULTIPLIER, SNEAKERS, HOVERBOARD = (
+    "magnet", "shield", "jetpack", "multiplier", "sneakers", "hoverboard")
+POWERUP_KINDS = (MAGNET, SHIELD, JETPACK, MULTIPLIER, SNEAKERS, HOVERBOARD)
 OBSTACLE_LENGTH = {TRAIN: 220, LOW: 34, HIGH: 26}
 
 

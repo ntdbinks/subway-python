@@ -45,6 +45,12 @@ def _powerup(kind: str) -> pygame.Surface:
         pygame.draw.polygon(s, (40, 200, 130), [(8, 24), (24, 24), (30, 20), (30, 26), (8, 27)])
         pygame.draw.rect(s, (255, 255, 255), (9, 26, 22, 3))                    # semelle
         pygame.draw.line(s, (255, 255, 255), (14, 18), (20, 22), 2)             # lacet
+    elif kind == "hoverboard":
+        _disc(s, (80, 150, 230))
+        pygame.draw.ellipse(s, (60, 70, 90), (7, 16, 24, 8))                    # planche
+        pygame.draw.ellipse(s, (120, 200, 255), (7, 24, 24, 6))                 # halo réacteur
+        pygame.draw.circle(s, (255, 230, 120), (13, 27), 2)
+        pygame.draw.circle(s, (255, 230, 120), (25, 27), 2)
     else:
         _disc(s, (120, 120, 130))
     return s
@@ -71,7 +77,8 @@ def _tone(freq_start, freq_end, duration=0.15, volume=0.35):
 
 class Assets:
     def __init__(self):
-        self.powerups = {k: _powerup(k) for k in ("magnet", "shield", "jetpack", "multiplier", "sneakers")}
+        self.powerups = {k: _powerup(k) for k in
+                         ("magnet", "shield", "jetpack", "multiplier", "sneakers", "hoverboard")}
         self.sounds = {}
         if pygame.mixer.get_init():
             self.sounds = {

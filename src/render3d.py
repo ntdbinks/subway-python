@@ -11,7 +11,7 @@ import pygame
 from pygame import gfxdraw
 
 from . import config as C
-from .entities import HIGH, JETPACK, LOW, MAGNET, MULTIPLIER, SHIELD, SNEAKERS, TRAIN
+from .entities import HIGH, HOVERBOARD, JETPACK, LOW, MAGNET, MULTIPLIER, SHIELD, SNEAKERS, TRAIN
 
 W, H = C.WIDTH, C.HEIGHT
 HORIZON = 196
@@ -55,7 +55,7 @@ BUILDING_COLORS = [
 
 POWERUP_GLOW = {
     MAGNET: (255, 90, 90), SHIELD: (90, 170, 255), JETPACK: (255, 150, 40),
-    MULTIPLIER: (170, 110, 240), SNEAKERS: (60, 210, 140),
+    MULTIPLIER: (170, 110, 240), SNEAKERS: (60, 210, 140), HOVERBOARD: (120, 180, 255),
 }
 
 
@@ -392,12 +392,20 @@ class Renderer:
             pygame.draw.ellipse(surf, col, (*P(-14, 114), 28 * k, 14 * k))
 
     def draw_runner(self, surf, cx, foot_y, k, char, *, run=0.0, airborne=False,
-                    sliding=False, flying=False, shield=False):
+                    sliding=False, flying=False, shield=False, hoverboard=False):
         """Dessine un coureur (vu de dos) paramétré par un personnage.
 
         Réutilisé par le jeu et par l'écran de sélection."""
         def P(dx, dy):
             return (cx + dx * k, foot_y - dy * k)
+
+        if hoverboard and not flying:
+            board = pygame.Rect(0, 0, int(48 * k), int(9 * k)); board.center = P(0, -2)
+            glow = pygame.Surface((board.w + int(20 * k), int(14 * k)), pygame.SRCALPHA)
+            pygame.draw.ellipse(glow, (120, 190, 255, 120), glow.get_rect())
+            surf.blit(glow, glow.get_rect(center=P(0, -6)))
+            pygame.draw.rect(surf, (60, 70, 92), board, border_radius=int(4 * k))
+            pygame.draw.rect(surf, (150, 210, 255), board, max(1, int(2 * k)), border_radius=int(4 * k))
 
         skin, top, top_dark = char["skin"], char["top"], char["top_dark"]
         legs, shoe, shoe2, bag = char["legs"], char["shoe"], char["shoe2"], char["bag"]
@@ -459,7 +467,9 @@ class Renderer:
         surf.blit(shadow, shadow.get_rect(center=(int(gx), int(gy))))
         if world.invuln_timer > 0 and int(world.invuln_timer * 12) % 2 == 0:
             return
-        foot_y = gy - pl.height * s
+        board_lift = 10 if (world.hoverboard_timer > 0 and pl.height < 1 and not pl.flying) else 0
+        foot_y = gy - (pl.height + board_lift) * s
         self.draw_runner(surf, gx, foot_y, s * 0.95, self.character,
                          run=math.sin(pl.anim_time * 14), airborne=pl.height > 1,
-                         sliding=pl.sliding, flying=pl.flying, shield=world.shield)
+                         sliding=pl.sliding, flying=pl.flying, shield=world.shield,
+                         hoverboard=world.hoverboard_timer > 0)

@@ -32,25 +32,26 @@ SLIDE_TIME = 0.6             # secondes
 JUMP_CLEARANCE = 38          # hauteur mini pour franchir une barrière basse
 
 # Défilement / difficulté
-START_SPEED = 320            # px/s
-MAX_SPEED = 900
-SPEED_GAIN = 9               # px/s gagnés par seconde de jeu
+START_SPEED = 250            # px/s
+MAX_SPEED = 680
+SPEED_GAIN = 6               # px/s gagnés par seconde de jeu
 ROW_GAP_START = 360          # distance entre deux rangées d'obstacles
 ROW_GAP_MIN = 230
 
 # Bonus
 POWERUP_CHANCE = 0.16        # probabilité d'un bonus par rangée
-MAGNET_TIME = 8.0            # secondes
+MAGNET_TIME = 20.0            # secondes
 MAGNET_RANGE = 260           # px au-dessus du joueur
 MAGNET_PULL = 1100           # px/s
 INVULN_TIME = 1.2            # invincibilité après la perte du bouclier
-JETPACK_TIME = 6.0           # secondes de vol (invincible, traînée de pièces)
+JETPACK_TIME = 20.0           # secondes de vol (invincible, traînée de pièces)
 JETPACK_HEIGHT = 210         # hauteur de vol
 JETPACK_COIN_GAP = 0.10      # une pièce de traînée toutes les N secondes de vol
-MULTIPLIER_TIME = 12.0       # secondes de score ×2
+MULTIPLIER_TIME = 20.0       # secondes de score ×2
 MULTIPLIER_FACTOR = 2
-SNEAKERS_TIME = 12.0         # secondes de super-baskets
+SNEAKERS_TIME = 20.0         # secondes de super-baskets
 SNEAKERS_BOOST = 1.5         # saut plus haut pendant les super-baskets
+HOVERBOARD_TIME = 20.0       # secondes de hoverboard (immunité aux chocs)
 
 # Score
 COIN_VALUE = 10

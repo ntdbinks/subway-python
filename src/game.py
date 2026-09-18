@@ -187,6 +187,7 @@ class Game:
             ("magnet", w.magnet_timer, C.MAGNET_TIME, (230, 60, 70)),
             ("multiplier", w.multiplier_timer, C.MULTIPLIER_TIME, (170, 110, 240)),
             ("sneakers", w.sneakers_timer, C.SNEAKERS_TIME, (60, 210, 140)),
+            ("hoverboard", w.hoverboard_timer, C.HOVERBOARD_TIME, (120, 180, 255)),
         ]
         y = 112
         for kind, t, full, col in gauges:
@@ -220,7 +221,7 @@ class Game:
         for i, line in enumerate([
             "Entrée / Espace : jouer",
             "← → : voie    ↑ : sauter    ↓ : glisser    P : pause    F11 : plein écran",
-            "Bonus : aimant · bouclier · jetpack · score ×2 · super-baskets",
+            "Bonus : aimant · bouclier · jetpack · ×2 · super-baskets · hoverboard",
             "C : choisir ton personnage",
             f"Record : {self.save['best_score']}    ·    Parties : {self.save['games_played']}",
         ]):
